@@ -1,0 +1,3 @@
+[spacy_models]
+en_ner_drugs = en_ner_drugs
+

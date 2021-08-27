@@ -1,0 +1,62 @@
+preprocess:
+  cmd: python -m spacy run preprocess
+  script:
+    - python scripts/preprocess.py assets/drugs_train.jsonl corpus/drugs_train.jsonl.spacy
+    - python scripts/preprocess.py assets/drugs_eval.jsonl corpus/drugs_eval.jsonl.spacy
+  deps:
+    - path: assets/drugs_train.jsonl
+      md5: 4461081e67d8160cab4624e61448f371
+    - path: assets/drugs_eval.jsonl
+      md5: 4d730f6132de46fad3f76720ce9794f7
+    - path: scripts/preprocess.py
+      md5: e8e35a96a81611c684cf44a446aa4c6c
+  outs:
+    - path: corpus/drugs_train.jsonl.spacy
+      md5: fd7cc4b9ba976b707b34717060a6af40
+    - path: corpus/drugs_eval.jsonl.spacy
+      md5: f4461fddd089241b3660c2a55cb09a9b
+  spacy_version: 3.0.0
+  spacy_git_version: a59f3fcf5
+train:
+  cmd: python -m spacy run train
+  script:
+    - python -m spacy train configs/config.conf --output training/ --paths.train corpus/drugs_train.jsonl.spacy
+      --paths.dev corpus/drugs_eval.jsonl.spacy --paths.vectors en_core_web_md
+  deps:
+    - path: corpus/drugs_train.jsonl.spacy
+      md5: fd7cc4b9ba976b707b34717060a6af40
+    - path: corpus/drugs_eval.jsonl.spacy
+      md5: f4461fddd089241b3660c2a55cb09a9b
+  outs:
+    - path: training/model-best
+      md5: 5ca55a0eefbd7cb4c81c908fde35bbf4
+  spacy_version: 3.0.0
+  spacy_git_version: a59f3fcf5
+evaluate:
+  cmd: python -m spacy run evaluate
+  script:
+    - python -m spacy evaluate training/model-best corpus/drugs_eval.jsonl.spacy --output
+      training/metrics.json
+  deps:
+    - path: corpus/drugs_eval.jsonl.spacy
+      md5: f4461fddd089241b3660c2a55cb09a9b
+    - path: training/model-best
+      md5: 5ca55a0eefbd7cb4c81c908fde35bbf4
+  outs:
+    - path: training/metrics.json
+      md5: b68210f057ae9f1e9cc47a5a64d15005
+  spacy_version: 3.0.0
+  spacy_git_version: a59f3fcf5
+package:
+  cmd: python -m spacy run package
+  script:
+    - python -m spacy package training/model-best packages --name ner_drugs --version
+      0.3.0 --force
+  deps:
+    - path: training/model-best
+      md5: 5ca55a0eefbd7cb4c81c908fde35bbf4
+  outs:
+    - path: packages/en_ner_drugs-0.3.0/dist/en_ner_drugs-0.3.0.tar.gz
+      md5: 9ae3f7b83c6e808ce19e256e9f5f0233
+  spacy_version: 3.0.0
+  spacy_git_version: a59f3fcf5

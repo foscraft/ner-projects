@@ -1,0 +1,51 @@
+{
+  "lang":"en",
+  "name":"pipeline",
+  "version":"0.0.0",
+  "spacy_version":">=3.0.0,<3.1.0",
+  "description":"",
+  "author":"",
+  "email":"",
+  "url":"",
+  "license":"",
+  "spacy_git_version":"a59f3fcf5",
+  "vectors":{
+    "width":300,
+    "vectors":20000,
+    "keys":684830,
+    "name":"en_vectors"
+  },
+  "labels":{
+    "tok2vec":[
+
+    ],
+    "ner":[
+      "DRUG"
+    ]
+  },
+  "pipeline":[
+    "tok2vec",
+    "ner"
+  ],
+  "components":[
+    "tok2vec",
+    "ner"
+  ],
+  "disabled":[
+
+  ],
+  "performance":{
+    "ents_per_type":{
+      "DRUG":{
+        "p":0.7710144928,
+        "r":0.7348066298,
+        "f":0.7524752475
+      }
+    },
+    "ents_f":0.7524752475,
+    "ents_p":0.7710144928,
+    "ents_r":0.7348066298,
+    "tok2vec_loss":268.5821418067,
+    "ner_loss":183.791690136
+  }
+}
